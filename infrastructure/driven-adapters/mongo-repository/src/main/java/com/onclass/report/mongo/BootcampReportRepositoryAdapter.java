@@ -6,6 +6,7 @@ import com.onclass.report.model.bootcampreport.gateways.BootcampReportRepository
 import com.onclass.report.mongo.document.BootcampReportDocument;
 import com.onclass.report.mongo.helper.AdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -43,5 +44,15 @@ public class BootcampReportRepositoryAdapter extends AdapterOperations<
 
         return mongoTemplate.updateFirst(query, update, BootcampReportDocument.class)
                 .then();
+    }
+
+    @Override
+    public Mono<BootcampReport> findMostEnrolledBootcamp() {
+        var query = new Query()
+                .with(Sort.by(Sort.Direction.DESC, "enrolledStudentCount"))
+                .limit(1);
+
+        return mongoTemplate.findOne(query, BootcampReportDocument.class)
+                .map(super::toEntity);
     }
 }

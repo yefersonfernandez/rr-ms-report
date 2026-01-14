@@ -1,4 +1,4 @@
-package com.onclass.report.model.enums;
+package com.onclass.report.enums;
 
 public enum ExceptionStatusCode {
     BAD_REQUEST("400-BD"),

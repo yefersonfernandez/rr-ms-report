@@ -1,4 +1,4 @@
-package com.onclass.report.model.port.consumer;
+package com.onclass.report.port.consumer;
 
 import com.onclass.report.model.bootcampreport.StudentReport;
 import reactor.core.publisher.Mono;

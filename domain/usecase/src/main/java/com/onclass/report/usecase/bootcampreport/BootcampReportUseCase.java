@@ -1,10 +1,13 @@
 package com.onclass.report.usecase.bootcampreport;
 
+import com.onclass.report.enums.ExceptionMessages;
+import com.onclass.report.exceptions.NotFoundException;
 import com.onclass.report.model.bootcampreport.BootcampCreated;
+import com.onclass.report.model.bootcampreport.BootcampReport;
 import com.onclass.report.model.bootcampreport.gateways.BootcampReportRepositoryPort;
-import com.onclass.report.model.port.consumer.CapabilityConsumerPort;
-import com.onclass.report.model.port.consumer.PersonConsumerPort;
-import com.onclass.report.model.port.consumer.TechnologyConsumerPort;
+import com.onclass.report.port.consumer.CapabilityConsumerPort;
+import com.onclass.report.port.consumer.PersonConsumerPort;
+import com.onclass.report.port.consumer.TechnologyConsumerPort;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -34,5 +37,10 @@ public class BootcampReportUseCase {
         return personConsumerPort.getPersonById(personId)
                 .flatMap(student -> bootcampReportRepositoryPort.addStudentToReport(bootcampId, student))
                 .then();
+    }
+
+    public Mono<BootcampReport> getMostSuccessfulBootcamp() {
+        return bootcampReportRepositoryPort.findMostEnrolledBootcamp()
+                .switchIfEmpty(Mono.error(new NotFoundException(ExceptionMessages.BOOTCAMP_NOT_FOUND.getMessage())));
     }
 }
