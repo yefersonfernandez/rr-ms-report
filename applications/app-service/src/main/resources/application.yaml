@@ -1,14 +1,51 @@
-##Spring Configuration
 server:
-  port: 8080
+  port: 8085
 spring:
   application:
-    name: ms-report
+    name: "ms-report"
   devtools:
     add-properties: false
-  h2:
-    console:
+  data:
+    mongodb:
+      uri: "mongodb://reto:123@localhost:27017/report_db?authSource=admin"
+adapter:
+  restconsumer:
+    technology-url: "http://localhost:8081"
+    capability-url: "http://localhost:8082"
+    person-url: "http://localhost:8084"
+    timeout: 5000
+management:
+  health:
+    circuitbreakers:
       enabled: true
-      path: /h2
-  profiles:
-    include:
+resilience4j:
+  circuitbreaker:
+    instances:
+      testGet:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
+      testPost:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
+
+entrypoint:
+  sqs:
+    region: "us-east-1"
+    bootcamp-report-queue-url: "https://sqs.us-east-1.amazonaws.com/225422344476/bootcampReportQueue"
+    person-enrollment-queue-url: "https://sqs.us-east-1.amazonaws.com/225422344476/personEnrollmentQueue"
+    waitTimeSeconds: 20
+    maxNumberOfMessages: 10
+    visibilityTimeoutSeconds: 10
+    numberOfThreads: 1
