@@ -1,11 +1,10 @@
 package com.onclass.report.consumer.rest;
 
-import com.onclass.report.consumer.dto.response.CapabilityListResponseDto;
 import com.onclass.report.consumer.dto.response.PersonResponseWrapperDto;
 import com.onclass.report.model.bootcampreport.StudentReport;
-import com.onclass.report.model.enums.ExceptionMessages;
-import com.onclass.report.model.exceptions.PersonMicroserviceException;
-import com.onclass.report.model.port.consumer.PersonConsumerPort;
+import com.onclass.report.enums.ExceptionMessages;
+import com.onclass.report.exceptions.PersonMicroserviceException;
+import com.onclass.report.port.consumer.PersonConsumerPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatusCode;

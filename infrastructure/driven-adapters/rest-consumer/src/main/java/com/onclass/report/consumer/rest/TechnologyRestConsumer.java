@@ -2,9 +2,9 @@ package com.onclass.report.consumer.rest;
 
 import com.onclass.report.consumer.dto.response.TechnologyListResponseDto;
 import com.onclass.report.model.bootcampreport.TechnologyReport;
-import com.onclass.report.model.enums.ExceptionMessages;
-import com.onclass.report.model.exceptions.TechnologyMicroserviceException;
-import com.onclass.report.model.port.consumer.TechnologyConsumerPort;
+import com.onclass.report.enums.ExceptionMessages;
+import com.onclass.report.exceptions.TechnologyMicroserviceException;
+import com.onclass.report.port.consumer.TechnologyConsumerPort;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
