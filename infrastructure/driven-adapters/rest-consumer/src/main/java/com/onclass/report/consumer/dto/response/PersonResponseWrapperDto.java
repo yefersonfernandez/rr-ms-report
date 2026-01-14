@@ -1,4 +1,7 @@
 package com.onclass.report.consumer.dto.response;
 
-public class PersonResponseWrapperDto {
-}
+import com.onclass.report.model.bootcampreport.StudentReport;
+
+public record PersonResponseWrapperDto(
+        StudentReport data
+) {}
