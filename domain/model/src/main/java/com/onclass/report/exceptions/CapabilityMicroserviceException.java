@@ -1,6 +1,6 @@
-package com.onclass.report.model.exceptions;
+package com.onclass.report.exceptions;
 
-import com.onclass.report.model.enums.ExceptionStatusCode;
+import com.onclass.report.enums.ExceptionStatusCode;
 
 public class CapabilityMicroserviceException extends BusinessException {
     public CapabilityMicroserviceException(String message) {
