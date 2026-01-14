@@ -19,3 +19,9 @@ include ':usecase'
 project(':app-service').projectDir = file('./applications/app-service')
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
+include ':mongo-repository'
+project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
+include ':sqs-listener'
+project(':sqs-listener').projectDir = file('./infrastructure/entry-points/sqs-listener')
