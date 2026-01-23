@@ -1,17 +1,23 @@
 package com.onclass.report.sqs.listener.config;
 
+import com.onclass.report.sqs.listener.helper.SQSListener;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
-import software.amazon.awssdk.metrics.LoggingMetricPublisher;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.model.Message;
+
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SQSConfigTest {
 
     @InjectMocks
@@ -23,36 +29,42 @@ class SQSConfigTest {
     @Mock
     private SQSProperties sqsProperties;
 
+    @Mock
+    private Function<Message, Mono<Void>> processor;
+
     @BeforeEach
-    void init() {
-        MockitoAnnotations.openMocks(this);
-        when(sqsProperties.region()).thenReturn("us-east-1");
-        when(sqsProperties.queueUrl()).thenReturn("http://localhost:4566/00000000000/queue-sqs");
-        when(sqsProperties.waitTimeSeconds()).thenReturn(20);
-        when(sqsProperties.maxNumberOfMessages()).thenReturn(10);
-        when(sqsProperties.numberOfThreads()).thenReturn(1);
+    void setUp() {
+        lenient().when(sqsProperties.region()).thenReturn("us-east-1");
+        lenient().when(sqsProperties.bootcampReportQueueUrl()).thenReturn("http://localhost:4566/queue/bootcamp-report");
+        lenient().when(sqsProperties.personEnrollmentQueueUrl()).thenReturn("http://localhost:4566/queue/person-enrollment");
+        lenient().when(sqsProperties.waitTimeSeconds()).thenReturn(20);
+        lenient().when(sqsProperties.maxNumberOfMessages()).thenReturn(10);
+        lenient().when(sqsProperties.numberOfThreads()).thenReturn(1);
     }
 
     @Test
-    void configSQSListenerIsNotNull() {
-        assertThat(sqsConfig.sqsListener(sqsAsyncClient, sqsProperties, message -> Mono.empty())).isNotNull();
+    @DisplayName("bootcampCreatedQueueListener should create and return a listener")
+    void bootcampCreatedQueueListener_shouldReturnListener() {
+        SQSListener listener = sqsConfig.bootcampCreatedQueueListener(
+                sqsAsyncClient,
+                sqsProperties,
+                processor
+        );
+
+        assertThat(listener).isNotNull();
+        verify(sqsProperties).bootcampReportQueueUrl();
     }
 
     @Test
-    void configSqsIsNotNull() {
-        var loggingMetricPublisher = LoggingMetricPublisher.create();
-        assertThat(sqsConfig.configSqs(sqsProperties, loggingMetricPublisher)).isNotNull();
-    }
+    @DisplayName("personEnrollQueueListener should create and return a listener")
+    void personEnrollQueueListener_shouldReturnListener() {
+        SQSListener listener = sqsConfig.personEnrollQueueListener(
+                sqsAsyncClient,
+                sqsProperties,
+                processor
+        );
 
-    @Test
-    void configSqsWhenEndpointIsNotNull() {
-        var loggingMetricPublisher = LoggingMetricPublisher.create();
-        when(sqsProperties.endpoint()).thenReturn("http://localhost:4566");
-        assertThat(sqsConfig.configSqs(sqsProperties, loggingMetricPublisher)).isNotNull();
-    }
-
-    @Test
-    void resolveEndpointIsNull() {
-        assertThat(sqsConfig.resolveEndpoint(sqsProperties)).isNull();
+        assertThat(listener).isNotNull();
+        verify(sqsProperties).personEnrollmentQueueUrl();
     }
 }

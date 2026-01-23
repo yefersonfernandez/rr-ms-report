@@ -32,7 +32,6 @@ public class BootcampReportRepositoryAdapter extends AdapterOperations<
         this.mongoTemplate = mongoTemplate;
     }
 
-
     @Override
     public Mono<Void> addStudentToReport(Long bootcampId, StudentReport student) {
         var query = new Query(Criteria.where("bootcampId").is(bootcampId)

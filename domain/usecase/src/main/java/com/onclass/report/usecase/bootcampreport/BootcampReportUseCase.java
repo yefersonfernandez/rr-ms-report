@@ -35,8 +35,7 @@ public class BootcampReportUseCase {
 
     public Mono<Void> addPersonToBootcampReport(Long bootcampId, Long personId) {
         return personConsumerPort.getPersonById(personId)
-                .flatMap(student -> bootcampReportRepositoryPort.addStudentToReport(bootcampId, student))
-                .then();
+                .flatMap(student -> bootcampReportRepositoryPort.addStudentToReport(bootcampId, student));
     }
 
     public Mono<BootcampReport> getMostSuccessfulBootcamp() {
